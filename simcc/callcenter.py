@@ -123,7 +123,7 @@ class Customer:
         
 
         l = {}
-        l['id'] = self.id,
+        l['id'] = self.id
         l['start'] = start_time
         l['ivr'] = ivr_time
         l['queue'] = queue_time
