@@ -25,7 +25,6 @@ class Simulation:
         self.num_costumers_start = num_costumers_start
         self.simulation_time = simulation_time
 
-
         random.seed(23)
     
     def start(self):
@@ -44,23 +43,27 @@ class Simulation:
 
 
     def stats(self, verbose=False):
-        stats={}
+        summary={}
         calls = []
+
         for customer in self.demand.customers:
             for c in customer.calls:
                 calls.append(c)
 
         df = pd.DataFrame(calls)
         df['total'] = df['end'] - df['start']
-        stats['customers'] = len(df)
-        stats['total_avg'] = df.total.mean()
-        stats['total_std'] = df.total.std()
+        
+        summary['customers'] = len(df)
+        summary['total_avg'] = df.total.mean()
+        summary['total_std'] = df.total.std()
+
         if verbose:
             print(f'\n[TM={self.callcenter.num_telemarketers} ({self.simulation_time} min)]')
-            print(f'Customers {stats["customers"]}')
-            print(f'Total time average {stats["total_avg"]:.2f} min')
-            print(f'Total time standard deviation {stats["total_std"]:.2f} min')
-        return df, stats
+            print(f'Customers {summary["customers"]}')
+            print(f'Total time average {summary["total_avg"]:.2f} min')
+            print(f'Total time standard deviation {summary["total_std"]:.2f} min')
+        
+        return df, summary
 
 
 class Demand:
@@ -120,7 +123,7 @@ class Customer:
         
 
         l = {}
-        l['id'] = self,
+        l['id'] = self.id,
         l['start'] = start_time
         l['ivr'] = ivr_time
         l['queue'] = queue_time
