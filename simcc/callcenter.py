@@ -7,10 +7,9 @@ class Simulation:
                 num_queue_slots=1, 
                 num_telemarketers=1,
                 num_costumers_start=0,
-                num_intercall_minutes=1,
+                num_intercall_minutes=[],
                 ivr_max_time=3,
                 telemarketer_max_time=10,
-
                 simulation_time=60):
         self.env = simpy.Environment()
 
@@ -36,7 +35,12 @@ class Simulation:
 
         while True:
             customer = self.demand.new_customer()
-            yield self.env.timeout(self.demand.intercall_minutes())
+            # frecuency of this hour
+            hour = int((self.env.now / 60) % 24)
+            intercall_minutes = self.demand.num_intercall_minutes[hour]
+
+            yield self.env.timeout(intercall_minutes)
+            
             self.env.process(customer.call(self.callcenter))
 
     def run(self):
