@@ -13,11 +13,13 @@ class Simulation:
 
                 simulation_time=60):
         self.env = simpy.Environment()
+
         self.callcenter = CallCenter(self.env,
                                      num_queue_slots,
                                      num_telemarketers,
                                      ivr_max_time,
                                      telemarketer_max_time)
+        
         self.demand = Demand(self.env,
                             num_intercall_minutes)
 
@@ -89,8 +91,6 @@ class Customer:
         self.env = env
         self.id = identifier
         self.calls = []
-
-        self.request = random.choices(['P1', 'P2', 'P3', 'P4', 'P5'], [5, 10, 20, 30, 35])
 
     def call(self, callcenter):
         start_time = self.env.now
